@@ -1,0 +1,103 @@
+<?php 
+    include('config/constants.php');
+    include('partials-front/redirect.php');
+?>
+
+<html>
+    <head>
+        <title>Login - Food Order System</title>
+        <link rel="stylesheet" href="css/admin.css">
+    </head>
+
+    <body>
+        
+        <div class="login">
+            <h1 class="text-center">Login</h1>
+            <br><br>
+
+            <?php 
+                if(isset($_SESSION['customerLogin']))
+                {
+                    echo $_SESSION['customerLogin'];
+                    unset($_SESSION['customerLogin']);
+                }
+
+                if(isset($_SESSION['no-login-message']))
+                {
+                    echo $_SESSION['no-login-message'];
+                    unset($_SESSION['no-login-message']);
+                }
+
+                if(isset($_SESSION['customerSignUp']))
+                {
+                    echo $_SESSION['customerSignUp'];
+                    unset($_SESSION['customerSignUp']);
+                }
+            ?>
+            <br><br>
+
+            <!-- Login Form Starts HEre -->
+            <form action="" method="POST" class="text-center">
+            Username: <br>
+            <input type="text" required name="username" placeholder="Enter Username"><br><br>
+
+            Password: <br>
+            <input type="password" required name="password" placeholder="Enter Password"><br><br>
+
+            <input type="submit" name="submit" value="Login" class="btn-primary">
+            <br><br>
+            </form>
+            <!-- Login Form Ends HEre -->
+
+            <p class="text-center">Don't have account? <a href="<?php echo SITEURL; ?>sign-up.php">Sign up here</a></p><br>
+            <p class="text-center">Forget password ?!!<a href="<?php echo SITEURL; ?>contact.php">Click Here</a></p><br>
+            <p class="text-center">Created By - <a href="https://www.facebook.com/profile.php?id=100075443966221" target=”_blank”>Pinak </a>& <a href="https://www.facebook.com/yasmin.ema.77920" target=”_blank”>Ema</a></p>
+        </div>
+
+    </body>
+</html>
+
+<?php 
+
+    //CHeck whether the Submit Button is Clicked or NOt
+    if(isset($_POST['submit']))
+    {
+        //Process for Login
+        //1. Get the Data from Login form
+        // $username = $_POST['username'];
+        // $password = md5($_POST['password']);
+        $username = mysqli_real_escape_string($conn, $_POST['username']);
+        
+        $raw_password = md5($_POST['password']);
+        $password = mysqli_real_escape_string($conn, $raw_password);
+
+        //2. SQL to check whether the user with username and password exists or not
+        $sql = "SELECT * FROM tbl_customer WHERE username='$username' AND password='$password'";
+
+        //3. Execute the Query
+        $res = mysqli_query($conn, $sql);
+
+        //4. COunt rows to check whether the user exists or not
+        $count = mysqli_num_rows($res);
+
+        if($count==1)
+        {
+            //customer AVailable and Login Success
+            $_SESSION['customerLogin'] = "<div class='success'>Login Successful.</div>";
+            $_SESSION['customer'] = $username; //TO check whether the user is logged in or not and logout will unset it
+
+            //REdirect to HOme Page/Dashboard
+            header('location:'.SITEURL);
+        }
+        else
+        {
+            //customer not Available and Login FAil
+            $_SESSION['customerLogin'] = "<div class='error text-center'>Username or Password did not match.</div>";
+            //REdirect to HOme Page/Dashboard
+            header('location:'.SITEURL.'login.php');
+        }
+
+
+    }
+
+?>
