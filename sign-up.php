@@ -44,7 +44,7 @@
 
             <p class="text-center">Already have account? <a href="<?php echo SITEURL; ?>login.php">Got to Login</a></p>
 
-            <p class="text-center">Created By - <a href="#">Pinak</a></p>
+            <p class="text-center">Created By - <a href="https://www.facebook.com/profile.php?id=100075443966221">Pinak</a> & <a href="https://www.facebook.com/yasmin.ema.77920">Ema</a></p>
         </div>
 
     </body>
